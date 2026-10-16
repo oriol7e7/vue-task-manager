@@ -17,4 +17,11 @@ const onCreateTask = () => {
   </form>
 </template>
 
-<style scoped></style>
+<style scoped>
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+</style>

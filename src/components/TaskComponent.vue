@@ -5,9 +5,9 @@ const { task } = defineProps<{ task: Task }>()
 </script>
 
 <template>
-  <div>
+  <div class="task">
     <h4 :class="task.completed ? 'completed' : 'not-completed'">{{ task.name }}</h4>
-    <button @click="emit('onComplete', task.id)">Completa</button>
+    <button class="completa" @click="emit('onComplete', task.id)">Completa</button>
     <button @click="emit('onDelete', task.id)">Elimina</button>
   </div>
 </template>
@@ -15,5 +15,15 @@ const { task } = defineProps<{ task: Task }>()
 <style scoped>
 .completed {
   text-decoration: line-through;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.completa {
+  background-color: transparent;
+  color: rgb(250, 185, 100);
 }
 </style>

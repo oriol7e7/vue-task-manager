@@ -31,29 +31,57 @@ const completeTask = (id: number) => {
 </script>
 
 <template>
-  <h1>Task Manager</h1>
-  <AddTask @create-task="createTask" />
-  <h4>My tasks</h4>
-  <label for="">Only completed</label>
-  <input type="checkbox" v-model="onlyCompleted" />
-  <!--Totes les tasques-->
-  <TaskComponent
-    v-if="!onlyCompleted"
-    v-for="task in tasks"
-    :key="task.id"
-    :task="task"
-    @on-complete="completeTask(task.id)"
-    @on-delete="deleteTask(task.id)"
-  />
-  <!--Tasques completades-->
-  <TaskComponent
-    v-else
-    v-for="task in completedTasks"
-    :key="task.id + task.name"
-    :task="task"
-    @on-complete="completeTask(task.id)"
-    @on-delete="deleteTask(task.id)"
-  />
+  <main>
+    <h1>Task Manager</h1>
+    <AddTask @create-task="createTask" />
+    <h4>My tasks</h4>
+    <div class="filter">
+      <label for="">Only completed</label>
+      <input type="checkbox" v-model="onlyCompleted" />
+    </div>
+
+    <!--Totes les tasques-->
+    <div class="tasks">
+      <TaskComponent
+        v-if="!onlyCompleted"
+        v-for="task in tasks"
+        :key="task.id"
+        :task="task"
+        @on-complete="completeTask(task.id)"
+        @on-delete="deleteTask(task.id)"
+      />
+      <!--Tasques completades-->
+      <TaskComponent
+        v-else
+        v-for="task in completedTasks"
+        :key="task.id + task.name"
+        :task="task"
+        @on-complete="completeTask(task.id)"
+        @on-delete="deleteTask(task.id)"
+      />
+    </div>
+  </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+  width: 100%;
+  height: 100dvh;
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter {
+  display: flex;
+  gap: 0.25rem;
+}
+</style>
