@@ -75,7 +75,7 @@ const completeTask = (id: number) => {
         </div>
       </div>
       <!--Tasques completades-->
-      <div v-else>
+      <div v-else class="tasks">
         <div class="task" v-for="task in completedTasks" :key="task.id">
           <h4 :class="task.completed ? 'completed' : 'not-completed'">{{ task.name }}</h4>
           <button class="completa" @click="completeTask(task.id)">
