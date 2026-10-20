@@ -68,7 +68,9 @@ const completeTask = (id: number) => {
       <div class="tasks" v-if="!onlyCompleted">
         <div class="task" v-for="task in tasks" :key="task.id">
           <h4 :class="task.completed ? 'completed' : 'not-completed'">{{ task.name }}</h4>
-          <button class="completa" @click="completeTask(task.id)">Completa</button>
+          <button class="completa" @click="completeTask(task.id)">
+            {{ task.completed ? 'Desmarca' : 'Completa' }}
+          </button>
           <button @click="deleteTask(task.id)">Elimina</button>
         </div>
       </div>
@@ -76,7 +78,9 @@ const completeTask = (id: number) => {
       <div v-else>
         <div class="task" v-for="task in completedTasks" :key="task.id">
           <h4 :class="task.completed ? 'completed' : 'not-completed'">{{ task.name }}</h4>
-          <button class="completa" @click="completeTask(task.id)">Completa</button>
+          <button class="completa" @click="completeTask(task.id)">
+            {{ task.completed ? 'Desmarca' : 'Completa' }}
+          </button>
           <button @click="deleteTask(task.id)">Elimina</button>
         </div>
       </div>
