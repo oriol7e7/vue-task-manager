@@ -53,10 +53,10 @@ const completeTask = (id: number) => {
 <template>
   <main>
     <h1>Task Manager</h1>
-    <form @submit.prevent="createTask">
+    <div class="input">
       <input type="text" v-model="taskName" placeholder="Posa el nom de la tasca" />
-      <button type="submit">Crear Tasca</button>
-    </form>
+      <button @click="createTask" type="submit">Crear Tasca</button>
+    </div>
     <h4>My tasks</h4>
     <div class="filter">
       <label for="">Only completed</label>
@@ -125,7 +125,7 @@ main {
   background-color: transparent;
   color: rgb(250, 185, 100);
 }
-form {
+.input {
   display: flex;
   justify-content: center;
   align-items: center;
