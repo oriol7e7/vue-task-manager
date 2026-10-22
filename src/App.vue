@@ -1,45 +1,45 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { type Ref, ref, computed } from 'vue'
 import type { Task } from './model/Task'
-//Variable auxiliar per saber si mostrar les tasques completades o totes
+import TaskForm from './components/TaskForm.vue'
+import TaskList from './components/TaskList.vue'
 const onlyCompleted = ref(false)
-
-//Array de tasques generades
 const tasks = ref<Task[]>([])
 
-/**
- * Variable computada de tasques completades
- */
+//Filter of completed tasks only
 const completedTasks = computed(() => {
   return tasks.value.filter((t) => t.completed)
 })
 
-//Variable linkejada a l'input d'afegir tasca
-const taskName = ref('')
-
 /**
- * Crea una tasca amb la variable reactiva linkejada al input
+ * Creates a new task (called when AddTask.vue component emits create-task emit)
+ * @param taskName The name of the task
  */
-const createTask = () => {
+const createTask = (taskName: string) => {
   const lastId = tasks.value.length
   const task: Task = {
     id: lastId + 1,
-    name: taskName.value,
+    name: taskName,
     completed: false,
   }
   tasks.value.push(task)
 }
+
 /**
- * Esborra una tasca
- * @param id Id de la tasca a esborrar
+ * Deletes a task (called when Task.list.vue emits on-delete emit)
+ * @param id The id of the task to delete
  */
 const deleteTask = (id: number) => {
   const taskIdxToDelete = tasks.value.findIndex((t) => t.id === id)
+  if (taskIdxToDelete === -1) {
+    return
+  }
   tasks.value.splice(taskIdxToDelete, 1)
 }
+
 /**
- * Marca una tasca com a completada
- * @param id L'id de la tasca a completar
+ * Completes a task (called when Task.list.vue emits on-complete emit)
+ * @param id The id of the task to complete
  */
 const completeTask = (id: number) => {
   const taskIdxToComplete = tasks.value.findIndex((t) => t.id === id)
@@ -53,10 +53,7 @@ const completeTask = (id: number) => {
 <template>
   <main>
     <h1>Task Manager</h1>
-    <div class="input">
-      <input type="text" v-model="taskName" placeholder="Posa el nom de la tasca" />
-      <button @click="createTask" type="submit">Crear Tasca</button>
-    </div>
+    <TaskForm @create-task="createTask" />
     <h4>My tasks</h4>
     <div class="filter">
       <label for="">Only completed</label>
@@ -64,27 +61,12 @@ const completeTask = (id: number) => {
     </div>
 
     <!--Totes les tasques-->
-    <div class="tasks">
-      <div class="tasks" v-if="!onlyCompleted">
-        <div class="task" v-for="task in tasks" :key="task.id">
-          <h4 :class="task.completed ? 'completed' : 'not-completed'">{{ task.name }}</h4>
-          <button class="completa" @click="completeTask(task.id)">
-            {{ task.completed ? 'Desmarca' : 'Completa' }}
-          </button>
-          <button @click="deleteTask(task.id)">Elimina</button>
-        </div>
-      </div>
-      <!--Tasques completades-->
-      <div v-else class="tasks">
-        <div class="task" v-for="task in completedTasks" :key="task.id">
-          <h4 :class="task.completed ? 'completed' : 'not-completed'">{{ task.name }}</h4>
-          <button class="completa" @click="completeTask(task.id)">
-            {{ task.completed ? 'Desmarca' : 'Completa' }}
-          </button>
-          <button @click="deleteTask(task.id)">Elimina</button>
-        </div>
-      </div>
-    </div>
+    <TaskList
+      :only-completed="onlyCompleted"
+      :tasks="tasks"
+      @on-complete="completeTask"
+      @on-delete="deleteTask"
+    />
   </main>
 </template>
 
@@ -99,7 +81,6 @@ main {
   align-items: center;
   gap: 1rem;
 }
-
 .tasks {
   display: flex;
   flex-direction: column;
@@ -109,26 +90,5 @@ main {
 .filter {
   display: flex;
   gap: 0.25rem;
-}
-
-.completed {
-  text-decoration: line-through;
-}
-
-.task {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.completa {
-  background-color: transparent;
-  color: rgb(250, 185, 100);
-}
-.input {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
 }
 </style>
