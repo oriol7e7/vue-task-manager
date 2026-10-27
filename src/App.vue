@@ -3,13 +3,11 @@ import { type Ref, ref, computed } from 'vue'
 import type { Task } from './model/Task'
 import TaskForm from './components/TaskForm.vue'
 import TaskList from './components/TaskList.vue'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
+
 const onlyCompleted = ref(false)
 const tasks = ref<Task[]>([])
-
-//Filter of completed tasks only
-const completedTasks = computed(() => {
-  return tasks.value.filter((t) => t.completed)
-})
 
 /**
  * Creates a new task (called when AddTask.vue component emits create-task emit)
@@ -23,6 +21,7 @@ const createTask = (taskName: string) => {
     completed: false,
   }
   tasks.value.push(task)
+  toast.success('Tasca creada correctament')
 }
 
 /**
@@ -35,6 +34,7 @@ const deleteTask = (id: number) => {
     return
   }
   tasks.value.splice(taskIdxToDelete, 1)
+  toast.success('Tasca eliminada correctament')
 }
 
 /**
@@ -47,6 +47,7 @@ const completeTask = (id: number) => {
     return
   }
   tasks.value[taskIdxToComplete]!.completed = !tasks.value[taskIdxToComplete]!.completed
+  toast.success('Tasca completada correctament')
 }
 </script>
 
@@ -54,7 +55,7 @@ const completeTask = (id: number) => {
   <main>
     <h1>Task Manager</h1>
     <TaskForm @create-task="createTask" />
-    <h4>My tasks</h4>
+    <h4>My tasks - {{ tasks.length }}</h4>
     <div class="filter">
       <label for="">Only completed</label>
       <input type="checkbox" v-model="onlyCompleted" />
