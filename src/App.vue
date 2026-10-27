@@ -49,13 +49,19 @@ const completeTask = (id: number) => {
   tasks.value[taskIdxToComplete]!.completed = !tasks.value[taskIdxToComplete]!.completed
   toast.success('Tasca completada correctament')
 }
+
+//Variable computada per mostrar el numero de tasques completades
+const completedTasksCount = computed(() => {
+  const completedTasks = tasks.value.filter((t) => t.completed === true)
+  return completedTasks.length
+})
 </script>
 
 <template>
   <main>
     <h1>Task Manager</h1>
     <TaskForm @create-task="createTask" />
-    <h4>My tasks - {{ tasks.length }}</h4>
+    <h4>My tasks - {{ tasks.length }} | Completed: {{ completedTasksCount }}</h4>
     <div class="filter">
       <label for="">Only completed</label>
       <input type="checkbox" v-model="onlyCompleted" />

@@ -2,10 +2,20 @@
 import { computed } from 'vue'
 import type { Task } from '../model/Task'
 import TaskItem from './TaskItem.vue'
+
+/**
+ * Props pel component
+ * tasks - array de les tasques
+ * onlyCompleted - variable per saber si s'han de mostrar totes o les completades
+ */
 const props = defineProps<{ tasks: Task[]; onlyCompleted: boolean }>()
+
+//Variable computada amb el filtre per nomes mostrar tasques filtrades
 const completedTasks = computed(() => {
   return props.tasks.filter((t) => t.completed)
 })
+
+//Emits per enviar al App.vue per a que modifi
 const emit = defineEmits(['on-complete', 'on-delete'])
 
 /**
